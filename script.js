@@ -36,18 +36,33 @@
 			}
 		});
 
-		document.querySelectorAll('.lead-form').forEach((form) => form.addEventListener('submit', (event) => {
+		document.querySelectorAll('.lead-form').forEach((form) => form.addEventListener('submit', async (event) => {
 			event.preventDefault();
+			const status = form.querySelector('.form-status');
+			const submitButton = form.querySelector('button[type="submit"]');
 			const data = new FormData(form);
 			const business = (data.get('business') || '').trim();
-			const website = (data.get('website') || '').trim();
-			const message = (data.get('message') || '').trim();
-			const email = (data.get('email') || '').trim();
-			const subject = encodeURIComponent('FlowSync - Free Google Profile Check: ' + business);
-			const body = encodeURIComponent('Business: ' + business + '\nWebsite / Google Profile: ' + website + '\nEmail: ' + email + '\n\nWhat to check:\n' + message);
-			window.location.href = 'mailto:abid.flowsync@gmail.com?subject=' + subject + '&body=' + body;
-			const status = form.querySelector('.form-status');
-			if (status) status.textContent = 'Your email app should open with the request ready to send.';
+			data.append('access_key', '5a5a484c-b2fe-42c8-a708-527e10a24043');
+			data.append('subject', 'FlowSync - Free Google Profile Check: ' + business);
+			data.append('from_name', 'FlowSync website');
+			data.append('replyto', data.get('email') || '');
+			if (submitButton) submitButton.disabled = true;
+			if (status) status.textContent = 'Sending your request...';
+
+			try {
+				const response = await fetch('https://api.web3forms.com/submit', {
+					method: 'POST',
+					body: data,
+				});
+				const result = await response.json();
+				if (!response.ok || !result.success) throw new Error(result.message || 'Submission failed');
+				form.reset();
+				if (status) status.textContent = 'Thanks. Your request was sent successfully.';
+			} catch (error) {
+				if (status) status.textContent = 'Something went wrong. Please email abid.flowsync@gmail.com directly.';
+			} finally {
+				if (submitButton) submitButton.disabled = false;
+			}
 		}));
 	});
 })();
