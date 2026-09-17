@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://abid-root.github.io/Google-My-Business/sitemap.xml
+Sitemap: https://flowsync-us.vercel.app/sitemap.xml

@@ -1,6 +1,6 @@
 # FlowSync website
 
-Static GitHub Pages site for FlowSync Google Business Profile optimization and management.
+Static Vercel site for FlowSync Google Business Profile optimization and management.
 
 Primary navigation: Home, Pricing, How It Works, FAQ, Contact. Additional guidance and policy pages are linked in the footer.
 
